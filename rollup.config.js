@@ -36,7 +36,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/build/svelte-spaneco-scrollup.js'
+		file: 'public/build/spaneco-scrollup.js'
 	},
 	plugins: [
 		svelte({

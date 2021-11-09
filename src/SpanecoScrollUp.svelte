@@ -41,7 +41,7 @@
 </script>
 
 <!--Add this line to your web component-->
-<svelte:options tag="spaneco-scroll-up" />
+<svelte:options tag="spaneco-scrollup" />
 
 <svelte:window on:scroll="{handleOnScroll}" />
 
