@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	export let showOnPx: number = 150;
-	export let clrbg: string = '#fff';
+	export let clrbg: string = 'transparent';
 	export let clrfill: string = '#ccc';
 	export let clrfillhover: string = '#333';
 	export let width: number = 35;
