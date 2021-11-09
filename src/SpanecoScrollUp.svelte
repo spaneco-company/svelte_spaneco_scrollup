@@ -2,11 +2,12 @@
 	import { onMount } from 'svelte';
 
 	export let showOnPx: number = 150;
-	export let clricon: string = '#fff';
-	export let clrbg: string = '#45A1B0';
-	export let width: number = 15;
+	export let clrbg: string = '#fff';
+	export let clrfill: string = '#ccc';
+	export let clrfillhover: string = '#333';
+	export let width: number = 35;
 	export let position: number = 0;
-	export let radius: string = '0';
+	let progressPath;
 
 	let hidden: boolean = true;
 
@@ -14,10 +15,41 @@
 		return document.documentElement || document.body;
 	}
 
+	function getBodyHeight(): number {
+		return Math.max(
+				document.body.scrollHeight, document.documentElement.scrollHeight,
+				document.body.offsetHeight, document.documentElement.offsetHeight,
+				document.body.clientHeight, document.documentElement.clientHeight
+		);
+	}
+
+	function getScrollTopHeight(): number {
+		return window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
+	}
+
+	function getWindowHeight(): number {
+		return window.innerHeight || (document.documentElement || document.body).clientHeight;
+	}
+
+	function getProgressPathLength(): number {
+		return progressPath.getTotalLength();
+	}
+
+	function getProgressLength(): number {
+		return Math.floor(getProgressPathLength() - (getScrollTopHeight() * getProgressPathLength() / (getBodyHeight() - getWindowHeight())));
+	}
+
+	function updateProgressPath(): void {
+		progressPath.style.strokeDasharray = getProgressPathLength() + ' ' + getProgressPathLength();
+		progressPath.style.strokeDashoffset = getProgressLength();
+	}
+
 	function handleOnScroll(): void {
 		if (!scrollContainer()) {
 			return;
 		}
+
+		updateProgressPath();
 
 		if (scrollContainer().scrollTop > showOnPx) {
 			hidden = false;
@@ -43,55 +75,66 @@
 
 <svelte:window on:scroll="{handleOnScroll}" />
 
-<button class="btn" class:is-visible={!hidden} aria-hidden="true" tabindex="-1" on:click={scrollToTop} style="--position: {position};">
-	<div class="content" style="--clr-icon: {clricon}; --clr-bg: {clrbg}; --width: {`${width}px`}; --radius: {`${radius}`};">
-		<svg class="icon" viewBox="0 0 17 10">
-			<path d="M14.692 9.63a1.211 1.211 0 101.712-1.715L9.602 1.121a1.211 1.211 0 00-1.714.002L1.113 7.917a1.211 1.211 0 101.716 1.71l5.919-5.935 5.944 5.937z"></path>
-		</svg>
-	</div>
+<button class="btn" class:is-visible={!hidden} on:click={scrollToTop} style="--clr-fill: {clrfill}; --clr-fill-hover: {clrfillhover};; --clr-bg: {clrbg}; --position: {position}; --width: {`${width}px`};">
+	<svg class="bar" width="100%" height="100%" viewBox="-1 -1 102 102">
+		<path class="bar__path" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" bind:this={progressPath}/>
+	</svg>
+	<svg class="arrow" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24">
+		<path d="M12 19V5M5 12l7-7 7 7"/>
+	</svg>
 </button>
-
-{JSON.stringify($$props)}
-
 
 <style>
 	.btn {
 		position: fixed;
 		right: var(--position);
 		bottom: 0;
-		z-index: 100;
-		padding: 10px 15px;
-		transform: translateY(100%);
-		margin: 0;
-		border: 0;
-		background: none;
-		outline: none;
-		display: inline-block;
-		border: none;
+		width: var(--width);
+		height: var(--width);
 		cursor: pointer;
-		transition: transform .2s ease;
+		display: block;
+		border-radius: 50px;
+		box-shadow: inset  0 0 0 2px rgba(0,0,0,0.1);
+		outline: none;
+		border: none;
+		z-index: 10000;
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(15px);
+		transition: all 200ms linear;
+		background-color: var(--clr-bg);
+		padding: 0;
+		margin: 8px;
+		color: var(--clr-fill);
 	}
 
 	.btn.is-visible {
+		opacity: 1;
+		visibility: visible;
 		transform: translateY(0);
 	}
 
-	.content {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 10px;
-		width: var(--width);
-		height: var(--width);
-		box-shadow: 0 1px 6px rgb(0 0 0 / 20%);
-		color: var(--clr-icon);
-		background-color: var(--clr-bg);
-		border-radius: var(--radius);
+	.btn:hover .arrow {
+		transform: translate(-50%, -55%);
 	}
 
-	.icon {
+	.arrow {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: inherit;
+		stroke: currentColor;
 		width: 15px;
-		height: 10px;
-		fill: currentColor;
+		fill: none;
+		transition: all 200ms linear;
 	}
+
+	.bar {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 4;
+		transition: all 200ms linear;
+	}
+
 </style>
