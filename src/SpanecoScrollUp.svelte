@@ -5,12 +5,10 @@
 	export let clricon: string = '#fff';
 	export let clrbg: string = '#45A1B0';
 	export let width: number = 15;
+	export let position: number = 0;
 	export let radius: string = '0';
 
 	let hidden: boolean = true;
-
-	$:position = $$props.left === undefined ?  0 : 1;
-	$:radius = $$props.round === undefined ?  radius : '50%';
 
 	function scrollContainer() {
 		return document.documentElement || document.body;
