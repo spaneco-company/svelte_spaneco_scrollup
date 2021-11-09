@@ -5,7 +5,8 @@
 	export let clrbg: string = 'transparent';
 	export let clrfill: string = '#ccc';
 	export let clrfillhover: string = '#333';
-	export let width: number = 35;
+	export let width: number = '50px';
+	export let margin: string = '15px';
 	export let position: number = 0;
 	let progressPath;
 
@@ -75,9 +76,9 @@
 
 <svelte:window on:scroll="{handleOnScroll}" />
 
-<button class="btn" class:is-visible={!hidden} on:click={scrollToTop} style="--clr-fill: {clrfill}; --clr-fill-hover: {clrfillhover};; --clr-bg: {clrbg}; --position: {position}; --width: {`${width}px`};">
+<button class="btn" class:is-visible={!hidden} on:click={scrollToTop} style="--clr-fill: {clrfill}; --clr-fill-hover: {clrfillhover};; --clr-bg: {clrbg}; --position: {position}; --width: {width}; --margin: {margin};">
 	<svg class="bar" width="100%" height="100%" viewBox="-1 -1 102 102">
-		<path class="bar__path" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" bind:this={progressPath}/>
+		<path class="bar__path" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" bind:this={progressPath}/>npm run
 	</svg>
 	<svg class="arrow" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24">
 		<path d="M12 19V5M5 12l7-7 7 7"/>
@@ -104,7 +105,7 @@
 		transition: all 200ms linear;
 		background-color: var(--clr-bg);
 		padding: 0;
-		margin: 8px;
+		margin: var(--margin);
 		color: var(--clr-fill);
 	}
 
@@ -125,7 +126,7 @@
 		transform: translate(-50%, -50%);
 		color: inherit;
 		stroke: currentColor;
-		width: 15px;
+		width: calc(var(--width)/2.3);
 		fill: none;
 		transition: all 200ms linear;
 	}
