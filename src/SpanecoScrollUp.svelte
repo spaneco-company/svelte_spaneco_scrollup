@@ -5,12 +5,12 @@
 	export let clrbg: string = 'transparent';
 	export let clrfill: string = '#ccc';
 	export let clrfillhover: string = '#333';
-	export let width: number = '50px';
+	export let width: string = '50px';
 	export let margin: string = '15px';
 	export let position: number = 0;
 	let progressPath;
 
-	let hidden: boolean = true;
+	let visible: boolean = false;
 
 	function scrollContainer() {
 		return document.documentElement || document.body;
@@ -46,6 +46,8 @@
 	}
 
 	function handleOnScroll(): void {
+		visible = false;
+
 		if (!scrollContainer()) {
 			return;
 		}
@@ -53,9 +55,7 @@
 		updateProgressPath();
 
 		if (scrollContainer().scrollTop > showOnPx) {
-			hidden = false;
-		} else {
-			hidden = true;
+			visible = true;
 		}
 	}
 
@@ -76,7 +76,7 @@
 
 <svelte:window on:scroll="{handleOnScroll}" />
 
-<button class="btn" class:is-visible={!hidden} on:click={scrollToTop} style="--clr-fill: {clrfill}; --clr-fill-hover: {clrfillhover};; --clr-bg: {clrbg}; --position: {position}; --width: {width}; --margin: {margin};">
+<button class="btn" class:is-visible={visible} on:click={scrollToTop} style="--clr-fill: {clrfill}; --clr-fill-hover: {clrfillhover};; --clr-bg: {clrbg}; --position: {position}; --width: {width}; --margin: {margin};">
 	<svg class="bar" width="100%" height="100%" viewBox="-1 -1 102 102">
 		<path class="bar__path" d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" bind:this={progressPath}/>npm run
 	</svg>
