@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	export let showOnPx: number = 150;
+	export let showonpx: number = 150;
 	export let clrbg: string = 'transparent';
 	export let clrfill: string = '#ccc';
 	export let clrfillhover: string = '#333';
@@ -54,7 +54,7 @@
 
 		updateProgressPath();
 
-		if (scrollContainer().scrollTop > showOnPx) {
+		if (scrollContainer().scrollTop > showonpx) {
 			visible = true;
 		}
 	}
